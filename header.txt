@@ -1,0 +1,7 @@
+Options:
+  isGz:             true
+  isFlipY:          false
+  isVerbose:        false
+  isCreateBIDS:     true
+  isOnlySingleFile: false
+Files:
