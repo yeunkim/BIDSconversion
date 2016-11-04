@@ -9,31 +9,65 @@ from shutil import copyfile
 import fnmatch
 from glob import glob
 import traceback
+import re
 
+def atoi(text):
+    return int(text) if text.isdigit() else text
+
+def natural_keys(text):
+    return [ atoi(c) for c in re.split('(\d+)', text) ]
 
 def createPath(odir):
     if not os.path.exists(odir):
         os.makedirs(odir)
 
 def rename(idir, pattern, titlePattern):
-    try:
-        for pathAndFilename in glob(os.path.join(idir, pattern)):
-            names = (os.path.basename(pathAndFilename)).split('.')
-            ext = '.'.join(names[1:])
-            print names[0]
-            if os.path.exists(os.path.join(idir, titlePattern+'.{0}'.format(ext))):
-                exists = True
-                while exists:
-                    idx = titlePattern.find('run') + 5
-                    run = str(int(titlePattern[idx]) + 1)
-                    s = list(titlePattern)
-                    s[idx] = run
-                    titlePattern = "".join(s)
-                    if not os.path.exists(os.path.join(idir, titlePattern + '.{0}'.format(ext))):
-                        exists = False
-            os.rename(pathAndFilename,os.path.join(idir, titlePattern+'.{0}'.format(ext)))
-    except:
-        sys.stdout('Cannot find files with pattern {0} in {1}, skipping...'.format(pattern, idir))
+    if glob(os.path.join(idir, pattern)):
+        files = glob(os.path.join(idir, pattern))
+        files.sort(key=natural_keys)
+        for pathAndFilename in files:
+            if "dwi" in idir:
+                names = (os.path.basename(pathAndFilename)).split('.')
+
+                ext = '.'.join(names[1:])
+                parts = (os.path.basename(pathAndFilename)).split('_')
+                direction = next(x for x in parts if "DIR" in x)
+                newname = titlePattern.split('-')
+                tmp=direction.lower() + newname[2]
+                newname[2] = tmp
+                titlePattern_dir = '-'.join(newname)
+
+                if os.path.exists(os.path.join(idir, titlePattern_dir + '.{0}'.format(ext))):
+                    exists = True
+                    while exists:
+                        idx = titlePattern_dir.find('run') + 5
+                        run = str(int(titlePattern_dir[idx]) + 1)
+                        s = list(titlePattern_dir)
+                        s[idx] = run
+                        titlePattern_dir = "".join(s)
+                        if not os.path.exists(os.path.join(idir, titlePattern_dir + '.{0}'.format(ext))):
+                            exists = False
+                print os.path.basename(pathAndFilename), " --> ", (titlePattern_dir + '.{0}'.format(ext))
+                os.rename(pathAndFilename, os.path.join(idir, titlePattern_dir + '.{0}'.format(ext)))
+            else:
+                names = (os.path.basename(pathAndFilename)).split('.')
+                ext = '.'.join(names[1:])
+
+                if os.path.exists(os.path.join(idir, titlePattern + '.{0}'.format(ext))):
+                    exists = True
+                    while exists:
+                        idx = titlePattern.find('run') + 5
+                        run = str(int(titlePattern[idx]) + 1)
+                        s = list(titlePattern)
+                        s[idx] = run
+                        titlePattern = "".join(s)
+                        if not os.path.exists(os.path.join(idir, titlePattern + '.{0}'.format(ext))):
+                            exists = False
+                print os.path.basename(pathAndFilename), " --> ",(titlePattern + '.{0}'.format(ext))
+                os.rename(pathAndFilename, os.path.join(idir, titlePattern + '.{0}'.format(ext)))
+
+    else:
+        print 'Cannot find files with pattern {0}, skipping...'.format(pattern)
 
 if __name__ == '__main__':
 
@@ -64,6 +98,7 @@ if __name__ == '__main__':
                 newpath=subdir+'/'+ 'anat'
                 createPath(newpath)
                 src=idir+'/'+folder+'/'
+
                 files=glob(src+'/T1W_MPR_20*')
                 for file in files:
                     copyfile(glob(file)[0], newpath + '/' + os.path.split(file)[1])
@@ -137,7 +172,7 @@ if __name__ == '__main__':
                 fn = 'sub-' + args.subjID + '_task-rest_run-02_bold'
                 rename(fnpath, r'*REST_PA*', fn)
 
-                if os.path.exists(glob(fnpath+'/*rest*')[0]):
+                if glob(fnpath+'/*rest*'):
                     json = glob(scriptdir + '/json/*rest*')[0]
                     copyfile(json, odir + '/' + os.path.basename(json))
 
@@ -154,7 +189,7 @@ if __name__ == '__main__':
                 fn = 'sub-' + args.subjID + '_task-emotionregulation_run-02_bold'
                 rename(fnpath, r'*EMOTION_PA*', fn)
 
-                if os.path.exists(glob(fnpath + '/*emotion*')[0]):
+                if glob(fnpath + '/*emotion*'):
                     tsv = glob(scriptdir + '/tsv/*emotion*')
                     copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_'+ os.path.basename(tsv[0]))
                     copyfile(tsv[1], fnpath + '/sub-' + args.subjID + '_'+ os.path.basename(tsv[1]))
@@ -163,10 +198,10 @@ if __name__ == '__main__':
             if folder == "fmap":
                 fnpath = glob(subdir + '/' + folder)[0]
 
-                fn = 'sub-' + args.subjID + '_dir-AP_epi'
+                fn = 'sub-' + args.subjID + '_dir-AP_run-01_epi'
                 rename(fnpath, r'*FIELDMAP_AP*', fn)
 
-                fn = 'sub-' + args.subjID + '_dir-PA_epi'
+                fn = 'sub-' + args.subjID + '_dir-PA_run-01_epi'
                 rename(fnpath, r'*FIELDMAP_PA*', fn)
             if folder == "dwi":
                 fnpath = glob(subdir + '/' + folder)[0]
@@ -174,13 +209,13 @@ if __name__ == '__main__':
                 fn = 'sub-' + args.subjID + '_acq-AP_run-01_sbref'
                 rename(fnpath, r'DWI*AP_SBREF*', fn)
 
-                fn = 'sub-' + args.subjID + '_acq-PA_run-02_sbref'
+                fn = 'sub-' + args.subjID + '_acq-PA_run-01_sbref'
                 rename(fnpath, r'DWI*PA_SBREF*', fn)
 
                 fn = 'sub-' + args.subjID + '_acq-AP_run-01_dwi'
                 rename(fnpath, r'DWI*_AP*', fn)
 
-                fn = 'sub-' + args.subjID + '_acq-PA_run-02_dwi'
+                fn = 'sub-' + args.subjID + '_acq-PA_run-01_dwi'
                 rename(fnpath, r'DWI*_PA*', fn)
 
 
