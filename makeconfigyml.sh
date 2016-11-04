@@ -1,7 +1,9 @@
 #!/bin/bash
 
+## TODO: fix so that it takes in a list of directories
+
 if [ $# -lt 2 ]; then  
-	echo "usage: $0 [input_directory] [output_directory]"
+	echo "usage: $0 [file_with_input_directory_paths] [full_path_to_output_directory]"
 	exit 1;	
 fi;
 
@@ -18,12 +20,17 @@ fi;
 # echo "input directory= " ${in_dir}
 # echo "output directory= " ${out_dir}
 
-for i in `ls -d "${in_dir}"/* | xargs -n 1 basename`; do 
+for i in `cat "${in_dir}"`; do
+fn="$(basename ${i})"
+mkdir ${out_dir}/${fn}
+done;
 
+for i in `cat "${in_dir}"`; do
+fn="$(basename ${i})"
 echo "    -"
-echo "      in_dir: " ${in_dir}/${i}
-echo "      out_dir: " ${out_dir}/${i}
-echo "      filename: " ${i}
+echo "      in_dir: " ${i}
+echo "      out_dir: " ${out_dir}/${fn}
+echo "      filename: " ${fn}
 
 done
 
