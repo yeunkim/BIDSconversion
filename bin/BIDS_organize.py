@@ -99,7 +99,7 @@ if __name__ == '__main__':
                 createPath(newpath)
                 src=idir+'/'+folder+'/'
 
-                files=glob(src+'/T1W_MPR_20*')
+                files=glob(src+'/T1W*')
                 for file in files:
                     copyfile(glob(file)[0], newpath + '/' + os.path.split(file)[1])
 
