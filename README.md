@@ -11,6 +11,10 @@ FYI: Only takes Resting and Emotion for FMRI as of now
 4. Rename and organize files:
   BIDS-organize.py {input_directory} {output_directory} -dataset {name} -subjID {subjID}
 5. Edit JSON files (Total Readout Time for fMRI)
-6. Launch docker:
+6. Clone this build:
+  docker build -t hcp_dwi .
+7. Launch docker (subject level, not batch):
   i.e. docker run -ti --rm -v {local_input_dir}:{container_input_dir} -v {local_output_dir}:{containter_output_dir} $CMD {container_input_dir} {container_output_dir} participant -n_cpus {numofcores} --license_key {FreeSurfer_licensekey}
 
+Example usage:
+docker run -ti --rm -v ~/Projects/hcp/:/dataset -v ~/Projects/hcp_output/:/output hcp_dwi /dataset /output participant -n_cpus 8 --license_key ##########
