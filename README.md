@@ -2,6 +2,8 @@
 
 FYI: Only takes Resting and Emotion for FMRI as of now
 
+**DO NOT USE UNDERSCORES IN SUBJECT NAMES**
+
 1. Make text file with full path to input directories for conversion
 2. Make configuration file (required for batch conversion):
   makeconfigyml.sh ${txt file with input paths} ${OUTPUT_DIR} > batchconfig.yml
