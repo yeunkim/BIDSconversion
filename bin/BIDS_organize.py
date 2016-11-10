@@ -149,14 +149,17 @@ if __name__ == '__main__':
         scriptdir = dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
 
         for folder in os.listdir(subdir):
-            if folder == "anat":
-                fnpath = glob(subdir+'/'+folder)[0]
+            try:
+                if folder == "anat":
+                    fnpath = glob(subdir+'/'+folder)[0]
 
-                fn = 'sub-'+args.subjID+'_T1w'
-                rename(fnpath, r'T1W*', fn)
+                    fn = 'sub-'+args.subjID+'_T1w'
+                    rename(fnpath, r'T1W*', fn)
 
-                fn = 'sub-' + args.subjID + '_inplaneT2'
-                rename(fnpath, r'T2W*', fn)
+                    fn = 'sub-' + args.subjID + '_inplaneT2'
+                    rename(fnpath, r'T2W*', fn)
+            except ValueError:
+                sys.stdout.write('Please make sure there is only one T1 or T2 image.')
             if folder == "func":
                 fnpath = glob(subdir + '/' + folder)[0]
 
