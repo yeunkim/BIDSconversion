@@ -10,11 +10,20 @@ FYI: Only takes Resting and Emotion for FMRI as of now
 3. Run batch converter: 
   dcm2niibatch batchconfig.yml > batchconv_log.txt
   * You have to download and buil dcm2niibatch (https://github.com/rordenlab/dcm2niix)
+  * Also make sure to have just one T1w and T2w folders
 4. Rename and organize files:
   BIDS-organize.py {input_directory} {output_directory} -dataset {name} -subjID {subjID}
+  * Make a copy of the T2w_inplane files and rename the copy as *_T2w.nii.gz and *_T2w.json
 5. Edit JSON files (Total Readout Time for fMRI)
-6. Clone https://github.com/yeunkim/HCPPipelines_dev.git and build:
+6. Clone https://github.com/yeunkim/HCPPipelines.git and check out the dwi branch:
+
+  ```bash 
+  git clone https://github.com/yeunkim/HCPPipelines.git
+  cd HCPPipelines
+  git checkout dwi
   docker build -t hcp_dwi .
+  ```
+
 7. Launch docker (subject level, not batch):
   i.e. docker run -ti --rm -v {local_input_dir}:{container_input_dir} -v {local_output_dir}:{containter_output_dir} $CMD {container_input_dir} {container_output_dir} participant -n_cpus {numofcores} --license_key {FreeSurfer_licensekey}
 
