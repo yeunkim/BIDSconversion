@@ -111,7 +111,7 @@ if __name__ == '__main__':
                 for file in files:
                     copyfile(glob(file)[0], newpath + '/' + os.path.split(file)[1])
 
-            elif "RFMRI" in folder:
+            elif "RFMRI" in folder and "PHYSIOLOG" not in folder:
                 newpath = subdir + '/' + 'func'
                 createPath(newpath)
                 src = idir + '/' + folder + '/'
@@ -119,7 +119,7 @@ if __name__ == '__main__':
                 for file in files:
                     copyfile(glob(file)[0], newpath + '/' + os.path.split(file)[1])
 
-            elif "TFMRI" in folder:
+            elif "TFMRI" in folder and "PHYSIOLOG" not in folder:
                 newpath = subdir + '/' + 'func'
                 createPath(newpath)
                 src = idir + '/' + folder + '/'
@@ -135,11 +135,11 @@ if __name__ == '__main__':
                 for file in files:
                     copyfile(glob(file)[0], newpath + '/' + os.path.split(file)[1])
 
-            elif "DWI" in folder:
+            elif "DMRI" in folder and "PHYSIOLOG" not in folder:
                 newpath = subdir + '/' + 'dwi'
                 createPath(newpath)
                 src = idir + '/' + folder + '/'
-                files = glob(src + '/DWI*')
+                files = glob(src + '/DMRI*')
                 for file in files:
                     copyfile(glob(file)[0], newpath + '/' + os.path.split(file)[1])
 
@@ -163,41 +163,90 @@ if __name__ == '__main__':
             if folder == "func":
                 fnpath = glob(subdir + '/' + folder)[0]
 
-                fn = 'sub-' + args.subjID + '_task-rest_run-01_sbref'
+                fn = 'sub-' + args.subjID + '_task-rest_acq-AP_run-01_sbref'
                 rename(fnpath, r'*REST_AP_SBREF*', fn)
 
-                fn = 'sub-' + args.subjID + '_task-rest_run-02_sbref'
+                fn = 'sub-' + args.subjID + '_task-rest_acq-PA_run-01_sbref'
                 rename(fnpath, r'*REST_PA_SBREF*', fn)
 
-                fn = 'sub-' + args.subjID + '_task-rest_run-01_bold'
+                fn = 'sub-' + args.subjID + '_task-rest_acq-AP_run-01_bold'
                 rename(fnpath, r'*REST_AP*', fn)
 
-                fn = 'sub-' + args.subjID + '_task-rest_run-02_bold'
+                fn = 'sub-' + args.subjID + '_task-rest_acq-PA_run-01_bold'
                 rename(fnpath, r'*REST_PA*', fn)
 
                 if glob(fnpath+'/*rest*'):
-                    json = glob(scriptdir + '/json/*rest*')[0]
-                    copyfile(json, odir + '/' + os.path.basename(json))
+                    for i in range(0,2):
+                        json = glob(scriptdir + '/json/*rest*')[i]
+                        copyfile(json, odir + '/' + os.path.basename(json))
 
-
-                fn = 'sub-' + args.subjID + '_task-emotionregulation_run-01_sbref'
+                fn = 'sub-' + args.subjID + '_task-EMOTION_acq-AP_run-01_sbref'
                 rename(fnpath, r'*EMOTION_AP_SBREF*', fn)
 
-                fn = 'sub-' + args.subjID + '_task-emotionregulation_run-02_sbref'
+                fn = 'sub-' + args.subjID + '_task-EMOTION_acq-PA_run-01_sbref'
                 rename(fnpath, r'*EMOTION_PA_SBREF*', fn)
 
-                fn = 'sub-' + args.subjID + '_task-emotionregulation_run-01_bold'
+                fn = 'sub-' + args.subjID + '_task-EMOTION_acq-AP_run-01_bold'
                 rename(fnpath, r'*EMOTION_AP*', fn)
 
-                fn = 'sub-' + args.subjID + '_task-emotionregulation_run-02_bold'
+                fn = 'sub-' + args.subjID + '_task-EMOTION_acq-PA_run-01_bold'
                 rename(fnpath, r'*EMOTION_PA*', fn)
 
-                if glob(fnpath + '/*emotion*'):
-                    tsv = glob(scriptdir + '/tsv/*emotion*')
+                if glob(fnpath + '/*EMOTION*'):
+                    tsv = glob(scriptdir + '/tsv/*EMOTION*')
                     copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_'+ os.path.basename(tsv[0]))
                     copyfile(tsv[1], fnpath + '/sub-' + args.subjID + '_'+ os.path.basename(tsv[1]))
-                    json = glob(scriptdir + '/json/*emotion*')[0]
-                    copyfile(json, odir+'/'+os.path.basename(json))
+                    for i in range(0,2):
+                        json = glob(scriptdir + '/json/*EMOTION*')[i]
+                        copyfile(json, odir+'/'+os.path.basename(json))
+
+                fn = 'sub-' + args.subjID + '_task-carit_acq-AP_run-01_sbref'
+                rename(fnpath, r'*CARIT_AP_SBREF*', fn)
+
+                fn = 'sub-' + args.subjID + '_task-carit_acq-PA_run-01_sbref'
+                rename(fnpath, r'*CARIT_PA_SBREF*', fn)
+
+                fn = 'sub-' + args.subjID + '_task-carit_acq-AP_run-01_bold'
+                rename(fnpath, r'*CARIT_AP*', fn)
+
+                fn = 'sub-' + args.subjID + '_task-carit_acq-PA_run-01_bold'
+                rename(fnpath, r'*CARIT_PA*', fn)
+
+                if glob(fnpath + '/*carit*'):
+                    for i in range(0, 1):
+                        json = glob(scriptdir + '/json/*carit*')[0]
+                        copyfile(json, odir + '/' + os.path.basename(json))
+                    try:
+                        tsv = glob(scriptdir + '/tsv/*carit*')
+                        copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[0]))
+                        copyfile(tsv[1], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[1]))
+                    except:
+                        sys.stdout.write('tsv files for CARIT task fMRI not added yet.\n')
+
+                fn = 'sub-' + args.subjID + '_task-facematching_acq-AP_run-01_sbref'
+                rename(fnpath, r'*FACEMATCHING_AP_SBREF*', fn)
+
+                fn = 'sub-' + args.subjID + '_task-facematching_acq-PA_run-01_sbref'
+                rename(fnpath, r'*FACEMATCHING_PA_SBREF*', fn)
+
+                fn = 'sub-' + args.subjID + '_task-facematching_acq-AP_run-01_bold'
+                rename(fnpath, r'*FACEMATCHING_AP*', fn)
+
+                fn = 'sub-' + args.subjID + '_task-facematching_acq-PA_run-01_bold'
+                rename(fnpath, r'*FACEMATCHING_PA*', fn)
+
+                if glob(fnpath + '/*face*'):
+                    for i in range(0, 1):
+                        json = glob(scriptdir + '/json/*face*')[0]
+                        copyfile(json, odir + '/' + os.path.basename(json))
+                    try:
+                        tsv = glob(scriptdir + '/tsv/*face*')
+                        copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[0]))
+                        copyfile(tsv[1], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[1]))
+                    except:
+                        sys.stdout.write('tsv files for FACEMATCHING task fMRI not added yet.\n')
+
+
             if folder == "fmap":
                 fnpath = glob(subdir + '/' + folder)[0]
 
@@ -210,16 +259,16 @@ if __name__ == '__main__':
                 fnpath = glob(subdir + '/' + folder)[0]
 
                 fn = 'sub-' + args.subjID + '_acq-AP_run-01_sbref'
-                rename(fnpath, r'DWI*AP_SBREF*', fn)
+                rename(fnpath, r'DMRI*AP_SBREF*', fn)
 
                 fn = 'sub-' + args.subjID + '_acq-PA_run-01_sbref'
-                rename(fnpath, r'DWI*PA_SBREF*', fn)
+                rename(fnpath, r'DMRI*PA_SBREF*', fn)
 
                 fn = 'sub-' + args.subjID + '_acq-AP_run-01_dwi'
-                rename(fnpath, r'DWI*_AP*', fn)
+                rename(fnpath, r'DMRI*_AP*', fn)
 
                 fn = 'sub-' + args.subjID + '_acq-PA_run-01_dwi'
-                rename(fnpath, r'DWI*_PA*', fn)
+                rename(fnpath, r'DMRI*_PA*', fn)
 
 
     except:

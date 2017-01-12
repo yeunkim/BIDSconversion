@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+## TODO: fix so that it takes in a list of directories
 
 if [ $# -lt 2 ]; then  
 	echo "usage: $0 [file_with_input_directory_paths] [full_path_to_output_directory]"
@@ -13,7 +13,7 @@ out_dir=$2
 if [ -f header.txt ]; then 
 	cat header.txt
 else
-	cat ${DIR}/header.txt
+	cat /home/yeunkimlocal/Documents/BIDS_conversion/header.txt
 fi;
 
 
