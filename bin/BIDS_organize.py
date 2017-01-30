@@ -10,12 +10,16 @@ import fnmatch
 from glob import glob
 import traceback
 import re
+import json
 
 def atoi(text):
     return int(text) if text.isdigit() else text
 
 def natural_keys(text):
     return [ atoi(c) for c in re.split('(\d+)', text) ]
+
+def natsort(text):
+    return(int(text[text.rfind('_') + 1 : ]))
 
 def createPath(odir):
     if not os.path.exists(odir):
@@ -127,7 +131,7 @@ if __name__ == '__main__':
                 for file in files:
                     copyfile(glob(file)[0], newpath+'/'+os.path.split(file)[1])
 
-            elif "FIELDMAP" in folder:
+            elif "FIELDMAP" in folder and "ASL" not in folder:
                 newpath = subdir + '/' + 'fmap'
                 createPath(newpath)
                 src = idir + '/' + folder + '/'
@@ -158,6 +162,13 @@ if __name__ == '__main__':
 
                     fn = 'sub-' + args.subjID + '_inplaneT2'
                     rename(fnpath, r'T2W*', fn)
+
+                    T2s = glob(subdir + '/' + folder + '/')
+                    for t in T2s:
+                        fn = 'sub-' + args.subjID + '_T2w.'
+                        ext = '.'.join(os.path.split(t)[1].split('.')[1:])
+                        copyfile(glob(t)[0], os.path.split(t)[0] + '/' + fn + ext)
+
             except ValueError:
                 sys.stdout.write('Please make sure there is only one T1 or T2 image.')
             if folder == "func":
@@ -255,6 +266,36 @@ if __name__ == '__main__':
 
                 fn = 'sub-' + args.subjID + '_dir-PA_run-01_epi'
                 rename(fnpath, r'*FIELDMAP_PA*', fn)
+
+                # edit spin echo field map JSON files
+                spinecho = True
+                SPElist = glob(fnpath + '/*json')
+
+                funclist = glob(subdir + '/func/*rest*bold*nii*' )
+                basenames = [ 'func/'+ os.path.basename(x) for x in funclist ]
+
+                a_dict = {'Intended For' : basenames, 'TotalReadoutTime' : 0.060320907}
+
+                for i in range(0,2):
+                    with open(SPElist[i]) as f:
+                        data =json.load(f)
+                    data.update(a_dict)
+                    with open(SPElist[i], 'w') as f:
+                        json.dump(data, f)
+
+                carit = glob(subdir + '/func/*carit*bold*nii*')
+                face = glob(subdir + '/func/*face*bold*nii*')
+                tasklist = carit + face
+                taskbasenames = ['func/'+ os.path.basename(x) for x in tasklist ]
+                a_dict = {'Intended For' : taskbasenames, 'TotalReadoutTime' : 0.060320907}
+
+                for i in range(2,4):
+                    with open(SPElist[i]) as f:
+                        data =json.load(f)
+                    data.update(a_dict)
+                    with open(SPElist[i], 'w') as f:
+                        json.dump(data, f)
+
             if folder == "dwi":
                 fnpath = glob(subdir + '/' + folder)[0]
 
