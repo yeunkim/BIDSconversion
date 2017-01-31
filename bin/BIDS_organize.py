@@ -152,7 +152,9 @@ if __name__ == '__main__':
 
         scriptdir = dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
 
-        for folder in os.listdir(subdir):
+        dirs = os.listdir(subdir)
+        dirs.sort(reverse=True)
+        for folder in dirs:
             try:
                 if folder == "anat":
                     if len(glob(subdir + '/' + folder + '/*T1W*nii*')) > 1:
@@ -200,8 +202,8 @@ if __name__ == '__main__':
 
                 if glob(fnpath+'/*rest*'):
                     for i in range(0,2):
-                        json = glob(scriptdir + '/json/*rest*')[i]
-                        copyfile(json, odir + '/' + os.path.basename(json))
+                        jsonfn = glob(scriptdir + '/json/*rest*')[i]
+                        copyfile(jsonfn, odir + '/' + os.path.basename(jsonfn))
 
                 fn = 'sub-' + args.subjID + '_task-EMOTION_acq-AP_run-01_sbref'
                 rename(fnpath, r'*EMOTION_AP_SBREF*', fn)
@@ -220,8 +222,8 @@ if __name__ == '__main__':
                     copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_'+ os.path.basename(tsv[0]))
                     copyfile(tsv[1], fnpath + '/sub-' + args.subjID + '_'+ os.path.basename(tsv[1]))
                     for i in range(0,2):
-                        json = glob(scriptdir + '/json/*EMOTION*')[i]
-                        copyfile(json, odir+'/'+os.path.basename(json))
+                        jsonfn = glob(scriptdir + '/json/*EMOTION*')[i]
+                        copyfile(jsonfn, odir+'/'+os.path.basename(jsonfn))
 
                 fn = 'sub-' + args.subjID + '_task-carit_acq-AP_run-01_sbref'
                 rename(fnpath, r'*CARIT_AP_SBREF*', fn)
@@ -236,9 +238,9 @@ if __name__ == '__main__':
                 rename(fnpath, r'*CARIT_PA*', fn)
 
                 if glob(fnpath + '/*carit*'):
-                    for i in range(0, 1):
-                        json = glob(scriptdir + '/json/*carit*')[0]
-                        copyfile(json, odir + '/' + os.path.basename(json))
+                    for i in range(0, 2):
+                        jsonfn = glob(scriptdir + '/json/*carit*')[0]
+                        copyfile(jsonfn, odir + '/' + os.path.basename(jsonfn))
                     try:
                         tsv = glob(scriptdir + '/tsv/*carit*')
                         copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[0]))
@@ -259,9 +261,9 @@ if __name__ == '__main__':
                 rename(fnpath, r'*FACEMATCHING_PA*', fn)
 
                 if glob(fnpath + '/*face*'):
-                    for i in range(0, 1):
-                        json = glob(scriptdir + '/json/*face*')[0]
-                        copyfile(json, odir + '/' + os.path.basename(json))
+                    for i in range(0, 2):
+                        jsonfn = glob(scriptdir + '/json/*face*')[i]
+                        copyfile(jsonfn, odir + '/' + os.path.basename(jsonfn))
                     try:
                         tsv = glob(scriptdir + '/tsv/*face*')
                         copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[0]))
@@ -284,6 +286,9 @@ if __name__ == '__main__':
                 SPElist = glob(fnpath + '/*json')
 
                 funclist = glob(subdir + '/func/*rest*bold*nii*' )
+                if len(funclist) == 0:
+                    funclist = [fn for fn in glob(subdir +  '/func/*REST*nii*') if 'SBREF' not in fn ]
+
                 basenames = [ 'func/'+ os.path.basename(x) for x in funclist ]
 
                 a_dict = {'Intended For' : basenames, 'TotalReadoutTime' : 0.060320907}
@@ -298,6 +303,10 @@ if __name__ == '__main__':
                 carit = glob(subdir + '/func/*carit*bold*nii*')
                 face = glob(subdir + '/func/*face*bold*nii*')
                 tasklist = carit + face
+
+                if len(tasklist) == 0:
+                    tasklist = [fn for fn in glob(subdir +  '/func/*CARIT*nii*') if 'SBREF' not in fn ] + [fn for fn in glob(subdir +  '/func/*FACE*nii*') if 'SBREF' not in fn ]
+
                 taskbasenames = ['func/'+ os.path.basename(x) for x in tasklist ]
                 a_dict = {'Intended For' : taskbasenames, 'TotalReadoutTime' : 0.060320907}
 
