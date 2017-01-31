@@ -172,10 +172,10 @@ if __name__ == '__main__':
                     fn = 'sub-' + args.subjID + '_inplaneT2'
                     rename(fnpath, '*'+T2fn+'*', fn)
 
-                    [os.remove(x) for x in glob(subdir + '/' + folder + '*T1W*')]
-                    [os.remove(x) for x in glob(subdir + '/' + folder + '*T2W*')]
+                    [os.remove(x) for x in glob(subdir + '/' + folder + '/*T1W*')]
+                    [os.remove(x) for x in glob(subdir + '/' + folder + '/*T2W*')]
 
-                    T2s = glob(subdir + '/' + folder + '/')
+                    T2s = glob(subdir + '/' + folder + '/T2w*')
                     for t in T2s:
                         fn = 'sub-' + args.subjID + '_T2w.'
                         ext = '.'.join(os.path.split(t)[1].split('.')[1:])
