@@ -5,7 +5,7 @@ FYI: Only takes Resting and Emotion for FMRI as of now
 Git clone BIDSConversion
 
 ```bash
-git clone https://github.com/yeunkim/BIDSconversion.git
+git clone https://yeunkim@bitbucket.org/yeunkim/bidsconversion.git
 ```
 
 **DO NOT USE UNDERSCORES IN SUBJECT NAMES**
