@@ -153,28 +153,33 @@ if __name__ == '__main__':
         scriptdir = dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
 
         for folder in os.listdir(subdir):
-            # try:
-            #     if folder == "anat":
-            #         # if len(glob(subdir + '/' + folder + '/*T1w*')) > 1:
-            #
-            #
-            # 
-            #         fnpath = glob(subdir+'/'+folder)[0]
-            #
-            #         fn = 'sub-'+args.subjID+'_T1w'
-            #         rename(fnpath, r'T1W*', fn)
-            #
-            #         fn = 'sub-' + args.subjID + '_inplaneT2'
-            #         rename(fnpath, r'T2W*', fn)
-            #
-            #         T2s = glob(subdir + '/' + folder + '/')
-            #         for t in T2s:
-            #             fn = 'sub-' + args.subjID + '_T2w.'
-            #             ext = '.'.join(os.path.split(t)[1].split('.')[1:])
-            #             copyfile(glob(t)[0], os.path.split(t)[0] + '/' + fn + ext)
-            #
-            # except ValueError:
-            #     sys.stdout.write('Please make sure there is only one T1 or T2 image.')
+            try:
+                if folder == "anat":
+                    if len(glob(subdir + '/' + folder + '/*T1W*nii*')) > 1:
+                        basenames = [os.path.basename(x).split(".")[0] for x in glob(subdir + '/' + folder + '/*T1W*nii*')]
+                        basenames.sort(key=natsort)
+                        T1fn = basenames[-1]
+                    if len(glob(subdir + '/' + folder + '/*T2W*nii*')) > 1:
+                        basenames = [os.path.basename(x).split(".")[0] for x in glob(subdir + '/' + folder + '/*T2W*nii*')]
+                        basenames.sort(key=natsort)
+                        T2fn = basenames[-1]
+
+                    fnpath = glob(subdir+'/'+folder)[0]
+
+                    fn = 'sub-'+args.subjID+'_T1w'
+                    rename(fnpath, T1fn, fn)
+
+                    fn = 'sub-' + args.subjID + '_inplaneT2'
+                    rename(fnpath, T2fn, fn)
+
+                    T2s = glob(subdir + '/' + folder + '/')
+                    for t in T2s:
+                        fn = 'sub-' + args.subjID + '_T2w.'
+                        ext = '.'.join(os.path.split(t)[1].split('.')[1:])
+                        copyfile(glob(t)[0], os.path.split(t)[0] + '/' + fn + ext)
+
+            except ValueError:
+                sys.stdout.write('Please make sure there is only one T1 or T2 image.')
             if folder == "func":
                 fnpath = glob(subdir + '/' + folder)[0]
 
