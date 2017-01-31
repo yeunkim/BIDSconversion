@@ -26,8 +26,8 @@
       <file leaf-file-name="BIDS_organize.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bin/BIDS_organize.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.51445085">
-              <caret line="293" column="42" selection-start-line="293" selection-start-column="42" selection-end-line="293" selection-end-column="42" />
+            <state vertical-scroll-proportion="0.34009546">
+              <caret line="160" column="14" selection-start-line="160" selection-start-column="14" selection-end-line="160" selection-end-column="14" />
               <folding>
                 <element signature="e#19#37#0" expanded="true" />
               </folding>
@@ -48,8 +48,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="432" />
-    <option name="y" value="296" />
+    <option name="x" value="389" />
+    <option name="y" value="290" />
     <option name="width" value="1920" />
     <option name="height" value="985" />
   </component>
@@ -243,7 +243,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="432" y="296" width="1920" height="985" extended-state="0" />
+    <frame x="389" y="290" width="1920" height="985" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.178515" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -291,8 +291,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/BIDS_organize.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51445085">
-          <caret line="293" column="42" selection-start-line="293" selection-start-column="42" selection-end-line="293" selection-end-column="42" />
+        <state vertical-scroll-proportion="0.34009546">
+          <caret line="160" column="14" selection-start-line="160" selection-start-column="14" selection-end-line="160" selection-end-column="14" />
           <folding>
             <element signature="e#19#37#0" expanded="true" />
           </folding>
