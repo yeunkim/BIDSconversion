@@ -167,10 +167,13 @@ if __name__ == '__main__':
                     fnpath = glob(subdir+'/'+folder)[0]
 
                     fn = 'sub-'+args.subjID+'_T1w'
-                    rename(fnpath, T1fn, fn)
+                    rename(fnpath, '*'+T1fn+'*', fn)
 
                     fn = 'sub-' + args.subjID + '_inplaneT2'
-                    rename(fnpath, T2fn, fn)
+                    rename(fnpath, '*'+T2fn+'*', fn)
+
+                    [os.remove(x) for x in glob(subdir + '/' + folder + '*T1W*')]
+                    [os.remove(x) for x in glob(subdir + '/' + folder + '*T2W*')]
 
                     T2s = glob(subdir + '/' + folder + '/')
                     for t in T2s:
