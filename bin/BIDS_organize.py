@@ -76,7 +76,7 @@ def rename(idir, pattern, titlePattern):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Renames and reorganizes files to be BIDS and BIDS-App compatible. \n"
-                                                 "Used with UCLA HCP Sequence 10/2016. Files are copied NOT moved.",
+                                                 "Used with Depression Connectome Project 1/2017. Files are copied NOT moved.",
                                      formatter_class=RawTextHelpFormatter)
     parser.add_argument('input_dir', help="Path to input directory, where converted files are located")
     parser.add_argument('output_dir', help="Path to output directory, where renamed and reorganized files will be placed")
