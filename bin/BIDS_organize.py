@@ -284,6 +284,8 @@ if __name__ == '__main__':
                 # edit spin echo field map JSON files
                 spinecho = True
                 SPElist = glob(fnpath + '/*json')
+                SPElist.sort()
+                print(SPElist)
 
                 funclist = glob(subdir + '/func/*rest*bold*nii*' )
                 if len(funclist) == 0:
@@ -293,7 +295,7 @@ if __name__ == '__main__':
 
                 a_dict = {'Intended For' : basenames, 'TotalReadoutTime' : 0.060320907}
 
-                for i in range(0,2):
+                for i in [0,2]:
                     with open(SPElist[i]) as f:
                         data =json.load(f)
                     data.update(a_dict)
@@ -310,7 +312,7 @@ if __name__ == '__main__':
                 taskbasenames = ['func/'+ os.path.basename(x) for x in tasklist ]
                 a_dict = {'Intended For' : taskbasenames, 'TotalReadoutTime' : 0.060320907}
 
-                for i in range(2,4):
+                for i in [1,3]:
                     with open(SPElist[i]) as f:
                         data =json.load(f)
                     data.update(a_dict)

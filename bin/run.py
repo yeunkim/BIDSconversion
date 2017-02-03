@@ -26,20 +26,26 @@ if __name__ == '__main__':
         lscmd = 'ls -d ' + args.sourcedir + '/* > ' + args.outputdir + '/dirs.txt'
         subprocess.call(lscmd, shell=True)
 
+        # check paths
+        if not os.path.exists(args.outputdir):
+            raise IOError('Directory ' + args.outputdir + ' does not exist.')
+        if os.path.exists(args.outputdir+'/' + args.subj + '_nii'):
+            raise IOError('Directory '+args.outputdir+'/' + args.subj + '_nii' + ' exists. Please rename the directory or delete the directory')
+
         # create bids directory
-        os.mkdir(args.outputdir+'/' + args.subj)
+        os.mkdir(args.outputdir+'/' + args.subj + '_nii')
 
         # convert DICOM to NIFTI
         scriptdir = dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
         makeconfigyml = scriptdir + '/' + 'makeconfigyml.sh'
-        bashargs = 'bash ' + makeconfigyml + ' ' + args.outputdir + '/dirs.txt ' + args.outputdir+'/'+args.subj + ' > '  + args.outputdir + '/batchconfig.yml'
+        bashargs = 'bash ' + makeconfigyml + ' ' + args.outputdir + '/dirs.txt ' + args.outputdir+'/'+args.subj + '_nii' + ' > '  + args.outputdir + '/batchconfig.yml'
         subprocess.call(bashargs, shell=True)
         dcm2niiargs = args.dcm2nii + ' ' + args.outputdir + '/batchconfig.yml'
         subprocess.call(dcm2niiargs, shell=True)
 
         # run BIDS_organize.py
         os.mkdir(args.outputdir + '/' + args.subj + '_bids')
-        bids_cmd = 'python '+scriptdir+'/bin/BIDS_organize.py '+ args.outputdir+'/'+args.subj+ ' ' + args.outputdir+'/'+args.subj+'_bids '+' -dataset '+args.dataset+' -subjID '+args.subj
+        bids_cmd = 'python '+scriptdir+'/bin/BIDS_organize.py '+ args.outputdir+'/'+args.subj+ '_nii ' + args.outputdir+'/'+args.subj+'_bids '+' -dataset '+args.dataset+' -subjID '+args.subj
         subprocess.call(bids_cmd, shell=True)
 
     except:
