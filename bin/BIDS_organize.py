@@ -293,7 +293,7 @@ if __name__ == '__main__':
 
                 basenames = [ 'func/'+ os.path.basename(x) for x in funclist ]
 
-                a_dict = {'Intended For' : basenames, 'TotalReadoutTime' : 0.060320907}
+                a_dict = {'IntendedFor' : basenames, 'TotalReadoutTime' : 0.060320907}
 
                 for i in [0,2]:
                     with open(SPElist[i]) as f:
