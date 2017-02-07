@@ -288,36 +288,41 @@ if __name__ == '__main__':
                 print(SPElist)
 
                 funclist = glob(subdir + '/func/*rest*bold*nii*' )
-                if len(funclist) == 0:
-                    funclist = [fn for fn in glob(subdir +  '/func/*REST*nii*') if 'SBREF' not in fn ]
-
-                basenames = [ 'func/'+ os.path.basename(x) for x in funclist ]
-
-                a_dict = {'IntendedFor' : basenames, 'TotalReadoutTime' : 0.060320907}
-
-                for i in [0,2]:
-                    with open(SPElist[i]) as f:
-                        data =json.load(f)
-                    data.update(a_dict)
-                    with open(SPElist[i], 'w') as f:
-                        json.dump(data, f)
-
                 carit = glob(subdir + '/func/*carit*bold*nii*')
                 face = glob(subdir + '/func/*face*bold*nii*')
                 tasklist = carit + face
+                # if len(funclist) == 0:
+                #     funclist = [fn for fn in glob(subdir +  '/func/*REST*nii*') if 'SBREF' not in fn ]
 
-                if len(tasklist) == 0:
-                    tasklist = [fn for fn in glob(subdir +  '/func/*CARIT*nii*') if 'SBREF' not in fn ] + [fn for fn in glob(subdir +  '/func/*FACE*nii*') if 'SBREF' not in fn ]
+                if len(tasklist) > 0:
+                    basenames = ['func/' + os.path.basename(x) for x in funclist]
+                    a_dict = {'IntendedFor': basenames, 'TotalReadoutTime': 0.060320907}
+                    for i in [0,2]:
+                        with open(SPElist[i]) as f:
+                            data =json.load(f)
+                        data.update(a_dict)
+                        with open(SPElist[i], 'w') as f:
+                            json.dump(data, f)
+                    taskbasenames = ['func/' + os.path.basename(x) for x in tasklist]
+                    a_dict = {'IntendedFor': taskbasenames, 'TotalReadoutTime': 0.060320907}
+                    for i in [1,3]:
+                        with open(SPElist[i]) as f:
+                            data = json.load(f)
+                        data.update(a_dict)
+                        with open(SPElist[i], 'w') as f:
+                            json.dump(data, f)
+                else:
+                    basenames = ['func/' + os.path.basename(x) for x in funclist]
+                    a_dict = {'IntendedFor': basenames, 'TotalReadoutTime': 0.060320907}
+                    for i in [0, 1]:
+                        with open(SPElist[i]) as f:
+                            data = json.load(f)
+                        data.update(a_dict)
+                        with open(SPElist[i], 'w') as f:
+                            json.dump(data, f)
 
-                taskbasenames = ['func/'+ os.path.basename(x) for x in tasklist ]
-                a_dict = {'IntendedFor' : taskbasenames, 'TotalReadoutTime' : 0.060320907}
-
-                for i in [1,3]:
-                    with open(SPElist[i]) as f:
-                        data =json.load(f)
-                    data.update(a_dict)
-                    with open(SPElist[i], 'w') as f:
-                        json.dump(data, f)
+                # if len(tasklist) == 0:
+                #     tasklist = [fn for fn in glob(subdir +  '/func/*CARIT*nii*') if 'SBREF' not in fn ] + [fn for fn in glob(subdir +  '/func/*FACE*nii*') if 'SBREF' not in fn ]
 
             if folder == "dwi":
                 fnpath = glob(subdir + '/' + folder)[0]
