@@ -310,7 +310,7 @@ if __name__ == '__main__':
                     tasklist = [fn for fn in glob(subdir +  '/func/*CARIT*nii*') if 'SBREF' not in fn ] + [fn for fn in glob(subdir +  '/func/*FACE*nii*') if 'SBREF' not in fn ]
 
                 taskbasenames = ['func/'+ os.path.basename(x) for x in tasklist ]
-                a_dict = {'Intended For' : taskbasenames, 'TotalReadoutTime' : 0.060320907}
+                a_dict = {'IntendedFor' : taskbasenames, 'TotalReadoutTime' : 0.060320907}
 
                 for i in [1,3]:
                     with open(SPElist[i]) as f:
