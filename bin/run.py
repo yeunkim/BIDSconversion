@@ -40,12 +40,12 @@ if __name__ == '__main__':
         makeconfigyml = scriptdir + '/' + 'makeconfigyml.sh'
         bashargs = 'bash ' + makeconfigyml + ' ' + args.outputdir + '/dirs.txt ' + args.outputdir+'/'+args.subj + '_nii' + ' > '  + args.outputdir + '/batchconfig.yml'
         subprocess.call(bashargs, shell=True)
-        dcm2niiargs = args.dcm2nii + ' ' + args.outputdir + '/batchconfig.yml'
+        dcm2niiargs = args.dcm2nii + ' ' + args.outputdir + '/batchconfig.yml' + ' > ' + args.outputdir + '/batchconversion.log'
         subprocess.call(dcm2niiargs, shell=True)
 
         # run BIDS_organize.py
         os.mkdir(args.outputdir + '/' + args.subj + '_bids')
-        bids_cmd = 'python '+scriptdir+'/bin/BIDS_organize.py '+ args.outputdir+'/'+args.subj+ '_nii ' + args.outputdir+'/'+args.subj+'_bids '+' -dataset '+args.dataset+' -subjID '+args.subj
+        bids_cmd = 'python '+scriptdir+'/bin/BIDS_organize.py '+ args.outputdir+'/'+args.subj+ '_nii ' + args.outputdir+'/'+args.subj+'_bids '+' -dataset '+args.dataset+' -subjID '+args.subj + ' > '  + args.outputdir + '/rename.log'
         subprocess.call(bids_cmd, shell=True)
 
     except:
