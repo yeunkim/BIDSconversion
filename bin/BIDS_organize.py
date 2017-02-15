@@ -285,7 +285,7 @@ if __name__ == '__main__':
                 spinecho = True
                 SPElist = glob(fnpath + '/*json')
                 SPElist.sort()
-                print(SPElist)
+                # print(SPElist)
 
                 funclist = glob(subdir + '/func/*rest*bold*nii*' )
                 carit = glob(subdir + '/func/*carit*bold*nii*')
