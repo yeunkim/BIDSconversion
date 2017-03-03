@@ -147,6 +147,14 @@ if __name__ == '__main__':
                 for file in files:
                     copyfile(glob(file)[0], newpath + '/' + os.path.split(file)[1])
 
+            elif "DWI" in folder and "PHYSIOLOG" not in folder:
+                newpath = subdir + '/' + 'dwi'
+                createPath(newpath)
+                src = idir + '/' + folder + '/'
+                files = glob(src + '/DMRI*')
+                for file in files:
+                    copyfile(glob(file)[0], newpath + '/' + os.path.split(file)[1])
+
             else:
                 continue
 
@@ -200,6 +208,8 @@ if __name__ == '__main__':
                 fn = 'sub-' + args.subjID + '_task-rest_acq-PA_run-01_bold'
                 rename(fnpath, r'*REST_PA*', fn)
 
+                # rsTRfilename = glob(os.path.join(subdir, folder, ))
+
                 if glob(fnpath+'/*rest*'):
                     for i in range(0,2):
                         jsonfn = glob(scriptdir + '/json/*rest*')[i]
@@ -249,21 +259,24 @@ if __name__ == '__main__':
                         sys.stdout.write('tsv files for CARIT task fMRI not added yet.\n')
 
                 fn = 'sub-' + args.subjID + '_task-facematching_acq-AP_run-01_sbref'
-                rename(fnpath, r'*FACEMATCHING_AP_SBREF*', fn)
+                rename(fnpath, r'*FACE*_AP_SBREF*', fn)
 
                 fn = 'sub-' + args.subjID + '_task-facematching_acq-PA_run-01_sbref'
-                rename(fnpath, r'*FACEMATCHING_PA_SBREF*', fn)
+                rename(fnpath, r'*FACE*_PA_SBREF*', fn)
 
                 fn = 'sub-' + args.subjID + '_task-facematching_acq-AP_run-01_bold'
-                rename(fnpath, r'*FACEMATCHING_AP*', fn)
+                rename(fnpath, r'*FACE*_AP*', fn)
 
                 fn = 'sub-' + args.subjID + '_task-facematching_acq-PA_run-01_bold'
-                rename(fnpath, r'*FACEMATCHING_PA*', fn)
+                rename(fnpath, r'*FACE*_PA*', fn)
 
+                #TODO: check if the repetition time is the same for the task fmris
                 if glob(fnpath + '/*face*'):
+
                     for i in range(0, 2):
                         jsonfn = glob(scriptdir + '/json/*face*')[i]
                         copyfile(jsonfn, odir + '/' + os.path.basename(jsonfn))
+
                     try:
                         tsv = glob(scriptdir + '/tsv/*face*')
                         copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[0]))
@@ -329,15 +342,19 @@ if __name__ == '__main__':
 
                 fn = 'sub-' + args.subjID + '_acq-AP_run-01_sbref'
                 rename(fnpath, r'DMRI*AP_SBREF*', fn)
+                rename(fnpath, r'DWI*AP_SBREF*', fn)
 
                 fn = 'sub-' + args.subjID + '_acq-PA_run-01_sbref'
                 rename(fnpath, r'DMRI*PA_SBREF*', fn)
+                rename(fnpath, r'DWI*PA_SBREF*', fn)
 
                 fn = 'sub-' + args.subjID + '_acq-AP_run-01_dwi'
                 rename(fnpath, r'DMRI*_AP*', fn)
+                rename(fnpath, r'DWI*_AP*', fn)
 
                 fn = 'sub-' + args.subjID + '_acq-PA_run-01_dwi'
                 rename(fnpath, r'DMRI*_PA*', fn)
+                rename(fnpath, r'DWI*_PA*', fn)
 
 
     except:
