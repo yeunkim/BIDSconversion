@@ -98,7 +98,8 @@ if __name__ == '__main__':
         subdir= odir+'/'+'sub-'+args.subjID
 
         for folder in os.listdir(idir):
-            if "T1W" in folder and "RMS" in folder:
+            # if "T1W" in folder and "RMS" in folder:
+            if "T1W" in folder:
                 newpath=subdir+'/'+ 'anat'
                 createPath(newpath)
                 src=idir+'/'+folder+'/'
@@ -107,7 +108,8 @@ if __name__ == '__main__':
                 for file in files:
                     copyfile(glob(file)[0], newpath + '/' + os.path.split(file)[1])
 
-            elif "T2W" in folder and "VNAV" in folder:
+            # elif "T2W" in folder and "VNAV" in folder:
+            elif "T2W" in folder:
                 newpath = subdir + '/' + 'anat'
                 createPath(newpath)
                 src = idir + '/' + folder + '/'
