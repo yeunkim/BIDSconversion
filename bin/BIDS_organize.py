@@ -167,14 +167,14 @@ if __name__ == '__main__':
         for folder in dirs:
             try:
                 if folder == "anat":
-                    if len(glob(subdir + '/' + folder + '/*T1W*nii*')) > 1:
-                        basenames = [os.path.basename(x).split(".")[0] for x in glob(subdir + '/' + folder + '/*T1W*nii*')]
-                        basenames.sort(key=natsort)
-                        T1fn = basenames[-1]
-                    if len(glob(subdir + '/' + folder + '/*T2W*nii*')) > 1:
-                        basenames = [os.path.basename(x).split(".")[0] for x in glob(subdir + '/' + folder + '/*T2W*nii*')]
-                        basenames.sort(key=natsort)
-                        T2fn = basenames[-1]
+                    # if len(glob(subdir + '/' + folder + '/*T1W*nii*')) > 1:
+                    basenames = [os.path.basename(x).split(".")[0] for x in glob(subdir + '/' + folder + '/*T1W*nii*')]
+                    basenames.sort(key=natsort)
+                    T1fn = basenames[-1]
+                    # if len(glob(subdir + '/' + folder + '/*T2W*nii*')) > 1:
+                    basenames = [os.path.basename(x).split(".")[0] for x in glob(subdir + '/' + folder + '/*T2W*nii*')]
+                    basenames.sort(key=natsort)
+                    T2fn = basenames[-1]
 
                     fnpath = glob(subdir+'/'+folder)[0]
 

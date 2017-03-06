@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8ba64c7-1469-4778-8a43-c2b59b77a9df" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml___jb_tmp___" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/BIDS_organize.py" afterPath="$PROJECT_DIR$/bin/BIDS_organize.py" />
     </list>
     <ignored path="bidsconversion.iws" />
@@ -27,8 +25,8 @@
       <file leaf-file-name="BIDS_organize.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bin/BIDS_organize.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1260">
-              <caret line="113" column="35" selection-start-line="113" selection-start-column="35" selection-end-line="113" selection-end-column="35" />
+            <state relative-caret-position="414">
+              <caret line="176" column="40" selection-start-line="176" selection-start-column="40" selection-end-line="176" selection-end-column="40" />
               <folding>
                 <element signature="e#19#37#0" expanded="true" />
               </folding>
@@ -609,8 +607,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/BIDS_organize.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1260">
-          <caret line="113" column="35" selection-start-line="113" selection-start-column="35" selection-end-line="113" selection-end-column="35" />
+        <state relative-caret-position="414">
+          <caret line="176" column="40" selection-start-line="176" selection-start-column="40" selection-end-line="176" selection-end-column="40" />
           <folding>
             <element signature="e#19#37#0" expanded="true" />
           </folding>
