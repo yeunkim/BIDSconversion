@@ -153,7 +153,7 @@ if __name__ == '__main__':
                 newpath = subdir + '/' + 'dwi'
                 createPath(newpath)
                 src = idir + '/' + folder + '/'
-                files = glob(src + '/DMRI*')
+                files = glob(src + '/DWI*')
                 for file in files:
                     copyfile(glob(file)[0], newpath + '/' + os.path.split(file)[1])
 
