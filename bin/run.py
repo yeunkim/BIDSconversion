@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import inspect, os
+import inspect, os, shutil
 import argparse
 import traceback
 import sys
@@ -47,6 +47,14 @@ if __name__ == '__main__':
         os.mkdir(args.outputdir + '/' + args.subj + '_bids')
         bids_cmd = 'python '+scriptdir+'/bin/BIDS_organize.py '+ args.outputdir+'/'+args.subj+ '_nii ' + args.outputdir+'/'+args.subj+'_bids '+' -dataset '+args.dataset+' -subjID '+args.subj + ' > '  + args.outputdir + '/rename.log'
         subprocess.call(bids_cmd, shell=True)
+
+        bidslogs = os.path.join(args.outputdir, "bids_conversion_logs")
+        os.mkdir(bidslogs)
+        shutil.move(os.path.join(args.outputdir, "dirs.txt"), os.path.join(bidslogs, "dirs.txt"))
+        shutil.move(os.path.join(args.outputdir, "batchconfig.yml"), os.path.join(bidslogs, "batchconfig.yml"))
+        shutil.move(os.path.join(args.outputdir, "batchconversion.log"),
+                    os.path.join(bidslogs, "batchconversion.log"))
+        shutil.move(os.path.join(args.outputdir, "rename.log"), os.path.join(bidslogs, "rename.log"))
 
     except:
         print traceback.print_exc(file=sys.stdout)
