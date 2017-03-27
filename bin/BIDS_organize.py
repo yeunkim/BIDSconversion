@@ -198,16 +198,16 @@ if __name__ == '__main__':
             if folder == "func":
                 fnpath = glob(subdir + '/' + folder)[0]
 
-                fn = 'sub-' + args.subjID + '_task-rest_acq-AP_run-01_sbref'
+                fn = 'sub-{0}_task-rest_acq-AP_run-01_sbref'.format(args.subjID)
                 rename(fnpath, r'*REST_AP_SBREF*', fn)
 
-                fn = 'sub-' + args.subjID + '_task-rest_acq-PA_run-01_sbref'
+                fn = 'sub-{0}_task-rest_acq-PA_run-01_sbref'.format(args.subjID)
                 rename(fnpath, r'*REST_PA_SBREF*', fn)
 
-                fn = 'sub-' + args.subjID + '_task-rest_acq-AP_run-01_bold'
+                fn = 'sub-{0}_task-rest_acq-AP_run-01_bold'.format(args.subjID)
                 rename(fnpath, r'*REST_AP*', fn)
 
-                fn = 'sub-' + args.subjID + '_task-rest_acq-PA_run-01_bold'
+                fn = 'sub-{0}_task-rest_acq-PA_run-01_bold'.format(args.subjID)
                 rename(fnpath, r'*REST_PA*', fn)
 
                 if glob(fnpath+'/*rest*'):
@@ -224,100 +224,45 @@ if __name__ == '__main__':
                         with open(os.path.join(odir, os.path.basename(jsonfn)), "w") as f:
                             f.write(json.dumps(rsDataTmp))
 
-                fn = 'sub-' + args.subjID + '_task-EMOTION_acq-AP_run-01_sbref'
-                rename(fnpath, r'*EMOTION_AP_SBREF*', fn)
+                taskfiles = glob(fnpath + '/*TFMRI*')
+                if taskfiles:
+                    tasknames = []
+                    for taskfile in taskfiles:
+                        tasknames.append(os.path.basename(taskfile).split('_')[1])
 
-                fn = 'sub-' + args.subjID + '_task-EMOTION_acq-PA_run-01_sbref'
-                rename(fnpath, r'*EMOTION_PA_SBREF*', fn)
+                    for taskname in set(tasknames):
+                        fn = 'sub-{0}_task-{1}_acq-AP_run-01_sbref'.format(args.subjID, taskname)
+                        rename(fnpath, r'*{0}_AP_SBREF*'.format(taskname), fn)
 
-                fn = 'sub-' + args.subjID + '_task-EMOTION_acq-AP_run-01_bold'
-                rename(fnpath, r'*EMOTION_AP*', fn)
+                        fn = 'sub-{0}_task-{1}_acq-PA_run-01_sbref'.format(args.subjID, taskname)
+                        rename(fnpath, r'*{0}_PA_SBREF*'.format(taskname), fn)
 
-                fn = 'sub-' + args.subjID + '_task-EMOTION_acq-PA_run-01_bold'
-                rename(fnpath, r'*EMOTION_PA*', fn)
+                        fn = 'sub-{0}_task-{1}_acq-AP_run-01_bold'.format(args.subjID, taskname)
+                        rename(fnpath, r'*{0}_AP*'.format(taskname), fn)
 
-                if glob(fnpath + '/*EMOTION*'):
-                    TRfilename = glob(os.path.join(subdir, folder, '*EMOTION*json'))[0]
-                    with open(TRfilename, "r") as f:
-                        Data = json.load(f)
-                    TR = Data["RepetitionTime"]
-                    tsv = glob(scriptdir + '/tsv/*EMOTION*')
-                    copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_'+ os.path.basename(tsv[0]))
-                    copyfile(tsv[1], fnpath + '/sub-' + args.subjID + '_'+ os.path.basename(tsv[1]))
-                    for i in range(0,2):
-                        jsonfn = glob(scriptdir + '/json/*EMOTION*')[i]
-                        copyfile(jsonfn, odir+'/'+os.path.basename(jsonfn))
-                        with open(os.path.join(odir, os.path.basename(jsonfn)), "r") as f:
-                            DataTmp = json.load(f)
-                            DataTmp["RepetitionTime"] = TR
-                        with open(os.path.join(odir, os.path.basename(jsonfn)), "w") as f:
-                            f.write(json.dumps(DataTmp))
+                        fn = 'sub-{0}_task-{1}_acq-PA_run-01_bold'.format(args.subjID, taskname)
+                        rename(fnpath, r'*{0}_PA*'.format(taskname), fn)
 
-                fn = 'sub-' + args.subjID + '_task-carit_acq-AP_run-01_sbref'
-                rename(fnpath, r'*CARIT_AP_SBREF*', fn)
-
-                fn = 'sub-' + args.subjID + '_task-carit_acq-PA_run-01_sbref'
-                rename(fnpath, r'*CARIT_PA_SBREF*', fn)
-
-                fn = 'sub-' + args.subjID + '_task-carit_acq-AP_run-01_bold'
-                rename(fnpath, r'*CARIT_AP*', fn)
-
-                fn = 'sub-' + args.subjID + '_task-carit_acq-PA_run-01_bold'
-                rename(fnpath, r'*CARIT_PA*', fn)
-
-                if glob(fnpath + '/*carit*'):
-                    TRfilename = glob(os.path.join(subdir, folder, '*carit*json'))[0]
-                    with open(TRfilename, "r") as f:
-                        Data = json.load(f)
-                    TR = Data["RepetitionTime"]
-                    for i in range(0, 2):
-                        jsonfn = glob(scriptdir + '/json/*carit*')[0]
-                        copyfile(jsonfn, odir + '/' + os.path.basename(jsonfn))
-                        with open(os.path.join(odir, os.path.basename(jsonfn)), "r") as f:
-                            DataTmp = json.load(f)
-                            DataTmp["RepetitionTime"] = TR
-                        with open(os.path.join(odir, os.path.basename(jsonfn)), "w") as f:
-                            f.write(json.dumps(DataTmp))
-                    try:
-                        tsv = glob(scriptdir + '/tsv/*carit*')
-                        copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[0]))
-                        copyfile(tsv[1], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[1]))
-                    except:
-                        sys.stdout.write('tsv files for CARIT task fMRI not added yet.\n')
-
-                fn = 'sub-' + args.subjID + '_task-facematching_acq-AP_run-01_sbref'
-                rename(fnpath, r'*FACE*_AP_SBREF*', fn)
-
-                fn = 'sub-' + args.subjID + '_task-facematching_acq-PA_run-01_sbref'
-                rename(fnpath, r'*FACE*_PA_SBREF*', fn)
-
-                fn = 'sub-' + args.subjID + '_task-facematching_acq-AP_run-01_bold'
-                rename(fnpath, r'*FACE*_AP*', fn)
-
-                fn = 'sub-' + args.subjID + '_task-facematching_acq-PA_run-01_bold'
-                rename(fnpath, r'*FACE*_PA*', fn)
-
-                #TODO: check if the repetition time is the same for the task fmris
-                if glob(fnpath + '/*face*'):
-                    TRfilename = glob(os.path.join(subdir, folder, '*face*json'))[0]
-                    with open(TRfilename, "r") as f:
-                        Data = json.load(f)
-                    TR = Data["RepetitionTime"]
-                    for i in range(0, 2):
-                        jsonfn = glob(scriptdir + '/json/*face*')[i]
-                        copyfile(jsonfn, odir + '/' + os.path.basename(jsonfn))
-                        with open(os.path.join(odir, os.path.basename(jsonfn)), "r") as f:
-                            DataTmp = json.load(f)
-                            DataTmp["RepetitionTime"] = TR
-                        with open(os.path.join(odir, os.path.basename(jsonfn)), "w") as f:
-                            f.write(json.dumps(DataTmp))
-                    try:
-                        tsv = glob(scriptdir + '/tsv/*face*')
-                        copyfile(tsv[0], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[0]))
-                        copyfile(tsv[1], fnpath + '/sub-' + args.subjID + '_' + os.path.basename(tsv[1]))
-                    except:
-                        sys.stdout.write('tsv files for FACEMATCHING task fMRI not added yet.\n')
-
+                        TRfilename = glob(os.path.join(subdir, folder, '*{0}*json'.format(taskname)))[0]
+                        with open(TRfilename, "r") as f:
+                            Data = json.load(f)
+                        TR = Data["RepetitionTime"]
+                        try:
+                            tsv = glob(scriptdir + '/tsv/*{0}*'.format(taskname))
+                            copyfile(tsv[0], os.path.join(fnpath, '/sub-{0}_{1}'.format(args.subjID, os.path.basename(tsv[0]))))
+                            copyfile(tsv[1], os.path.join(fnpath, '/sub-{0}_{1}'.format(args.subjID, os.path.basename(tsv[1]))))
+                        except:
+                            sys.stdout.write('tsv files for {0} task fMRI not added yet.\n'.format(taskname))
+                        for i in range(0, 2):
+                            jsonfn = glob(scriptdir + '/json/*TASKNAME*')[i]
+                            copyfile(jsonfn, os.path.join(odir, os.path.basename(jsonfn).replace('TASKNAME', taskname)))
+                            jsonfn = jsonfn.replace('TASKNAME', taskname)
+                            with open(os.path.join(odir, os.path.basename(jsonfn)), "r") as f:
+                                DataTmp = json.load(f)
+                                DataTmp["RepetitionTime"] = TR
+                                DataTmp["TaskName"] = taskname
+                            with open(os.path.join(odir, os.path.basename(jsonfn)), "w") as f:
+                                f.write(json.dumps(DataTmp))
 
             if folder == "fmap":
                 fnpath = glob(subdir + '/' + folder)[0]
@@ -332,19 +277,20 @@ if __name__ == '__main__':
                 spinecho = True
                 SPElist = glob(fnpath + '/*json')
                 SPElist.sort()
-                # print(SPElist)
 
-                funclist = glob(subdir + '/func/*rest*bold*nii*' )
-                carit = glob(subdir + '/func/*carit*bold*nii*')
-                face = glob(subdir + '/func/*face*bold*nii*')
-                emotion = glob(subdir + '/func/*EMOTION*bold*nii*')
+                funclist = glob(subdir + '/func/*rest*bold*nii*')
+                tasklist = []
+                if tasknames:
+                    for taskname in set(tasknames):
+                        tasklist= tasklist + glob(subdir+'/func/*{0}*bold*nii*'.format(taskname))
+                # carit = glob(subdir + '/func/*carit*bold*nii*')
+                # face = glob(subdir + '/func/*face*bold*nii*')
+                # emotion = glob(subdir + '/func/*EMOTION*bold*nii*')
 
-                tasklist = carit + face + emotion
-                # if len(funclist) == 0:
-                #     funclist = [fn for fn in glob(subdir +  '/func/*REST*nii*') if 'SBREF' not in fn ]
+                # tasklist = carit + face + emotion
                 if len(tasklist) > 0:
-                    basenames = ['func/' + os.path.basename(x) for x in funclist]
-                    a_dict = {'IntendedFor': basenames, 'TotalReadoutTime': 0.060320907}
+                    rsbasenames = ['func/' + os.path.basename(x) for x in funclist]
+                    a_dict = {'IntendedFor': rsbasenames, 'TotalReadoutTime': 0.060320907}
                     if len(SPElist) > 2:
                         for i in [0,2]:
                             with open(SPElist[i]) as f:
@@ -371,17 +317,14 @@ if __name__ == '__main__':
                             with open(SPElist[i], 'w') as f:
                                 json.dump(data, f)
                 else:
-                    basenames = ['func/' + os.path.basename(x) for x in funclist]
-                    a_dict = {'IntendedFor': basenames, 'TotalReadoutTime': 0.060320907}
+                    rsbasenames = ['func/' + os.path.basename(x) for x in funclist]
+                    a_dict = {'IntendedFor': rsbasenames, 'TotalReadoutTime': 0.060320907}
                     for i in [0, 1]:
                         with open(SPElist[i]) as f:
                             data = json.load(f)
                         data.update(a_dict)
                         with open(SPElist[i], 'w') as f:
                             json.dump(data, f)
-
-                # if len(tasklist) == 0:
-                #     tasklist = [fn for fn in glob(subdir +  '/func/*CARIT*nii*') if 'SBREF' not in fn ] + [fn for fn in glob(subdir +  '/func/*FACE*nii*') if 'SBREF' not in fn ]
 
             if folder == "dwi":
                 fnpath = glob(subdir + '/' + folder)[0]
