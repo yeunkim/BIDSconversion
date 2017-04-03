@@ -18,6 +18,8 @@ if __name__ == '__main__':
     parser.add_argument('dcm2nii', help='dcm2niibatch program')
     parser.add_argument('-subj', dest='subj', help='SubjID/prefix', required=True)
     parser.add_argument('-dataset', dest='dataset', help='Project name', required=True)
+    parser.add_argument('--tfmrifirst', help="Spin echo field maps for task fMRI were acquired prior to resting state"
+                                             "fMRI.", required=False, action='store_true')
 
     args = parser.parse_args()
 
@@ -44,9 +46,14 @@ if __name__ == '__main__':
         subprocess.call(dcm2niiargs, shell=True)
 
         # run BIDS_organize.py
-        os.mkdir(args.outputdir + '/' + args.subj + '_bids')
-        bids_cmd = 'python '+scriptdir+'/bin/BIDS_organize.py '+ args.outputdir+'/'+args.subj+ '_nii ' + args.outputdir+'/'+args.subj+'_bids '+' -dataset '+args.dataset+' -subjID '+args.subj + ' > '  + args.outputdir + '/rename.log'
-        subprocess.call(bids_cmd, shell=True)
+        if args.tfmrifirst:
+            os.mkdir(args.outputdir + '/' + args.subj + '_bids')
+            bids_cmd = 'python ' + scriptdir + '/bin/BIDS_organize.py ' + args.outputdir + '/' + args.subj + '_nii ' + args.outputdir + '/' + args.subj + '_bids ' + ' -dataset ' + args.dataset + ' -subjID ' + args.subj +  ' --tfmrifirst' + ' > ' + args.outputdir + '/rename.log'
+            subprocess.call(bids_cmd, shell=True)
+        else:
+            os.mkdir(args.outputdir + '/' + args.subj + '_bids')
+            bids_cmd = 'python '+scriptdir+'/bin/BIDS_organize.py '+ args.outputdir+'/'+args.subj+ '_nii ' + args.outputdir+'/'+args.subj+'_bids '+' -dataset '+args.dataset+' -subjID '+args.subj + ' > '  + args.outputdir + '/rename.log'
+            subprocess.call(bids_cmd, shell=True)
 
         bidslogs = os.path.join(args.outputdir, "bids_conversion_logs")
         os.mkdir(bidslogs)
