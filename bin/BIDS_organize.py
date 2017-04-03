@@ -82,7 +82,8 @@ if __name__ == '__main__':
     parser.add_argument('output_dir', help="Path to output directory, where renamed and reorganized files will be placed")
     parser.add_argument('-dataset', dest='dataset', help="Datast name", required=True)
     parser.add_argument('-subjID', dest='subjID', help="subject ID", required=True)
-
+    parser.add_argument('--tfmrifirst', help="Spin echo field map for task fMRI was acquired before the SPE field map"
+                                             "for the resting state fMRIs", required= False, action='store_true')
     args = parser.parse_args()
 
     try:
@@ -292,20 +293,36 @@ if __name__ == '__main__':
                     rsbasenames = ['func/' + os.path.basename(x) for x in funclist]
                     a_dict = {'IntendedFor': rsbasenames, 'TotalReadoutTime': 0.060320907}
                     if len(SPElist) > 2:
-                        for i in [0,2]:
-                            with open(SPElist[i]) as f:
-                                data =json.load(f)
-                            data.update(a_dict)
-                            with open(SPElist[i], 'w') as f:
-                                json.dump(data, f)
-                        taskbasenames = ['func/' + os.path.basename(x) for x in tasklist]
-                        a_dict = {'IntendedFor': taskbasenames, 'TotalReadoutTime': 0.060320907}
-                        for i in [1,3]:
-                            with open(SPElist[i]) as f:
-                                data = json.load(f)
-                            data.update(a_dict)
-                            with open(SPElist[i], 'w') as f:
-                                json.dump(data, f)
+                        if args.tfmrifirst:
+                            for i in [1, 3]:
+                                with open(SPElist[i]) as f:
+                                    data = json.load(f)
+                                data.update(a_dict)
+                                with open(SPElist[i], 'w') as f:
+                                    json.dump(data, f)
+                            taskbasenames = ['func/' + os.path.basename(x) for x in tasklist]
+                            a_dict = {'IntendedFor': taskbasenames, 'TotalReadoutTime': 0.060320907}
+                            for i in [0, 2]:
+                                with open(SPElist[i]) as f:
+                                    data = json.load(f)
+                                data.update(a_dict)
+                                with open(SPElist[i], 'w') as f:
+                                    json.dump(data, f)
+                        else:
+                            for i in [0,2]:
+                                with open(SPElist[i]) as f:
+                                    data =json.load(f)
+                                data.update(a_dict)
+                                with open(SPElist[i], 'w') as f:
+                                    json.dump(data, f)
+                            taskbasenames = ['func/' + os.path.basename(x) for x in tasklist]
+                            a_dict = {'IntendedFor': taskbasenames, 'TotalReadoutTime': 0.060320907}
+                            for i in [1,3]:
+                                with open(SPElist[i]) as f:
+                                    data = json.load(f)
+                                data.update(a_dict)
+                                with open(SPElist[i], 'w') as f:
+                                    json.dump(data, f)
                     else:
                         allfunclist = funclist + tasklist
                         basenames = ['func/' + os.path.basename(x) for x in allfunclist]
