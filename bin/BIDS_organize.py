@@ -232,19 +232,19 @@ if __name__ == '__main__':
                         tasknames.append(os.path.basename(taskfile).split('_')[1])
 
                     for taskname in set(tasknames):
-                        fn = 'sub-{0}_task-{1}_acq-AP_run-01_sbref'.format(args.subjID, taskname)
+                        fn = 'sub-{0}_task-{1}_acq-AP_run-01_sbref'.format(args.subjID, taskname.lower())
                         rename(fnpath, r'*{0}_AP_SBREF*'.format(taskname), fn)
 
-                        fn = 'sub-{0}_task-{1}_acq-PA_run-01_sbref'.format(args.subjID, taskname)
+                        fn = 'sub-{0}_task-{1}_acq-PA_run-01_sbref'.format(args.subjID, taskname.lower())
                         rename(fnpath, r'*{0}_PA_SBREF*'.format(taskname), fn)
 
-                        fn = 'sub-{0}_task-{1}_acq-AP_run-01_bold'.format(args.subjID, taskname)
+                        fn = 'sub-{0}_task-{1}_acq-AP_run-01_bold'.format(args.subjID, taskname.lower())
                         rename(fnpath, r'*{0}_AP*'.format(taskname), fn)
 
-                        fn = 'sub-{0}_task-{1}_acq-PA_run-01_bold'.format(args.subjID, taskname)
+                        fn = 'sub-{0}_task-{1}_acq-PA_run-01_bold'.format(args.subjID, taskname.lower())
                         rename(fnpath, r'*{0}_PA*'.format(taskname), fn)
 
-                        TRfilename = glob(os.path.join(subdir, folder, '*{0}*json'.format(taskname)))[0]
+                        TRfilename = glob(os.path.join(subdir, folder, '*{0}*json'.format(taskname.lower())))[0]
                         with open(TRfilename, "r") as f:
                             Data = json.load(f)
                         TR = Data["RepetitionTime"]
@@ -256,12 +256,12 @@ if __name__ == '__main__':
                             sys.stdout.write('tsv files for {0} task fMRI not added yet.\n'.format(taskname))
                         for i in range(0, 2):
                             jsonfn = glob(scriptdir + '/json/*TASKNAME*')[i]
-                            copyfile(jsonfn, os.path.join(odir, os.path.basename(jsonfn).replace('TASKNAME', taskname)))
-                            jsonfn = jsonfn.replace('TASKNAME', taskname)
+                            copyfile(jsonfn, os.path.join(odir, os.path.basename(jsonfn).replace('TASKNAME', taskname.lower())))
+                            jsonfn = jsonfn.replace('TASKNAME', taskname.lower())
                             with open(os.path.join(odir, os.path.basename(jsonfn)), "r") as f:
                                 DataTmp = json.load(f)
                                 DataTmp["RepetitionTime"] = TR
-                                DataTmp["TaskName"] = taskname
+                                DataTmp["TaskName"] = taskname.lower()
                             with open(os.path.join(odir, os.path.basename(jsonfn)), "w") as f:
                                 f.write(json.dumps(DataTmp))
 
@@ -283,7 +283,7 @@ if __name__ == '__main__':
                 tasklist = []
                 if tasknames:
                     for taskname in set(tasknames):
-                        tasklist= tasklist + glob(subdir+'/func/*{0}*bold*nii*'.format(taskname))
+                        tasklist= tasklist + glob(subdir+'/func/*{0}*bold*nii*'.format(taskname.lower()))
                 # carit = glob(subdir + '/func/*carit*bold*nii*')
                 # face = glob(subdir + '/func/*face*bold*nii*')
                 # emotion = glob(subdir + '/func/*EMOTION*bold*nii*')
