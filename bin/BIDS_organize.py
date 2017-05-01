@@ -281,12 +281,15 @@ if __name__ == '__main__':
 
                 funclist = glob(subdir + '/func/*rest*bold*nii*')
                 tasklist = []
-                if tasknames:
-                    for taskname in set(tasknames):
-                        tasklist= tasklist + glob(subdir+'/func/*{0}*bold*nii*'.format(taskname.lower()))
+                try:
+                    if tasknames:
+                        for taskname in set(tasknames):
+                            tasklist= tasklist + glob(subdir+'/func/*{0}*bold*nii*'.format(taskname.lower()))
                 # carit = glob(subdir + '/func/*carit*bold*nii*')
                 # face = glob(subdir + '/func/*face*bold*nii*')
                 # emotion = glob(subdir + '/func/*EMOTION*bold*nii*')
+                except:
+                    sys.stdout.write('No TFMRI detected.')
 
                 # tasklist = carit + face + emotion
                 if len(tasklist) > 0:
