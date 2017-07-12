@@ -259,7 +259,7 @@ if __name__ == '__main__':
                         funcrenames =[]
                         for func in funcFmapPair.flippairdict[speOrig.split('.')[0]]:
                             funcrenames.append([value for key, value in FUNCrenamed.iteritems() if func in key and 'nii' in key])
-                        funcrenames = [ x[0] for x in funcrenames if 'bold' in x[0]]
+                        funcrenames = [ 'func/{0}'.format(x[0]) for x in funcrenames if 'bold' in x[0]]
                         a_dict = {'IntendedFor': funcrenames , 'TotalReadoutTime': 0.060320907 }
                         with open(os.path.join(fnpath, speRenamed)) as f:
                             data = json.load(f)
