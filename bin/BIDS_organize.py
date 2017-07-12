@@ -137,7 +137,7 @@ if __name__ == '__main__':
         scriptdir = dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
 
         dirs = os.listdir(subdir)
-        # dirs.sort(reverse=True)
+        dirs.sort(reverse=True)
         for folder in dirs:
             try:
                 if folder == "anat":
