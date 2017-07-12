@@ -11,6 +11,7 @@ from glob import glob
 import traceback
 import re
 import json
+sys.path.append('..')
 from bidsconversion import readFileNameDICOM
 
 def atoi(text):
