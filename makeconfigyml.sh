@@ -17,21 +17,50 @@ else
 	cat ${DIR}/header.txt
 fi;
 
+filterDirs () {
+    subString=$1
+    longString=$2
+    outdirString=$3
+    if [[ ${longString} == *"${subString}"* ]] && [[ ${longString} != *"SETTER"* ]] && [[ ${longString} != *"PHYSIOLOG"* ]] && [[ ${longString} != *"ASL"* ]] ; then
+        fn="$(basename ${i})"
+        mkdir -p ${outdirString}/${fn}
 
+        echo "    -"
+        echo "      in_dir: " ${longString}
+        echo "      out_dir: " ${outdirString}/${fn}
+        echo "      filename: " ${fn}
+    fi
+}
 # echo "input directory= " ${in_dir}
 # echo "output directory= " ${out_dir}
 
 for i in `cat "${in_dir}"`; do
-fn="$(basename ${i})"
-mkdir ${out_dir}/${fn}
-done;
+    case $i in
 
-for i in `cat "${in_dir}"`; do
-fn="$(basename ${i})"
-echo "    -"
-echo "      in_dir: " ${i}
-echo "      out_dir: " ${out_dir}/${fn}
-echo "      filename: " ${fn}
-
+        *"T1W"*)
+            filterDirs T1W ${i} ${out_dir}
+            ;;
+        *"T2W"*)
+            filterDirs T2W ${i} ${out_dir}
+            ;;
+        *"RFMRI"*)
+            filterDirs RFMRI ${i} ${out_dir}
+            ;;
+        *"FIELDMAP"*)
+            filterDirs FIELDMAP ${i} ${out_dir}
+            ;;
+        *"TFMRI"*)
+            filterDirs TFMRI ${i} ${out_dir}
+            ;;
+        *"DMRI"*)
+            filterDirs DMRI ${i} ${out_dir}
+            ;;
+        *"DWI"*)
+            filterDirs DWI ${i} ${out_dir}
+            ;;
+    esac
 done
+
+
+
 
