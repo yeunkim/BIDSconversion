@@ -1,7 +1,5 @@
 # BIDSconversion
 
-FYI: Only takes Resting and Emotion for FMRI as of now
-
 Git clone BIDSConversion
 
 ```bash
@@ -25,21 +23,19 @@ git clone https://yeunkim@bitbucket.org/yeunkim/bidsconversion.git
 ```bash
   BIDSConversion/bin/BIDS-organize.py {input_directory} {output_directory} -dataset {name} -subjID {subjID}
 ```
-  * Make a copy of the T2w_inplane files and rename the copy as *_T2w.nii.gz and *_T2w.json
-5. Edit JSON files (Total Readout Time for fMRI)
-6. Clone https://github.com/yeunkim/HCPPipelines.git and check out the dwi branch:
+7. Clone https://github.com/yeunkim/HCPPipelines.git and check out the psychopy2fsl branch:
 
 ```bash 
   git clone https://github.com/yeunkim/HCPPipelines.git
   cd HCPPipelines
-  git checkout dwi
-  docker build -t hcp_dwi .
+  git checkout psychopy2fsl
+  docker build -t hcppipelines .
 ```
 
 7. Launch docker (subject level, not batch):
-  i.e. docker run -ti --rm -v {local_input_dir}:{container_input_dir} -v {local_output_dir}:{containter_output_dir} $CMD {container_input_dir} {container_output_dir} participant -n_cpus {numofcores} --license_key {FreeSurfer_licensekey}
+  i.e. docker run -ti --rm -v {local_input_dir}:{container_input_dir} -v {local_output_dir}:{containter_output_dir} $CMD {container_input_dir} {container_output_dir} -subjID {subjID} -dataset {study_name} --n_cpus {numofcores} --license_key {FreeSurfer_licensekey}
 
 Example usage:
 ```bash
-docker run -ti --rm -v ~/Projects/hcp/:/dataset -v ~/Projects/hcp_output/:/output hcp_dwi /dataset /output participant -n_cpus 8 --license_key ##########
+docker run -ti --rm -v ~/Projects/hcp/:/dataset -v ~/Projects/hcp_output/:/output hcppipelines /dataset /output -subjID k001 --n_cpus 4 -dataset DEPRESSION --license_key ########## 
 ```
