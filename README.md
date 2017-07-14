@@ -18,7 +18,6 @@ git clone https://yeunkim@bitbucket.org/yeunkim/bidsconversion.git
   dcm2niibatch batchconfig.yml > batchconv_log.txt
 ```
   * You have to download and buil dcm2niibatch (https://github.com/rordenlab/dcm2niix)
-  * Also make sure to have just one T1w and T2w folders
 4. Rename and organize files:
 ```bash
   BIDSConversion/bin/BIDS-organize.py {input_directory} {output_directory} -dataset {name} -subjID {subjID}
