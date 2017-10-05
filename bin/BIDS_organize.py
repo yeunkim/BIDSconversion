@@ -81,14 +81,13 @@ def fmap(subdir):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Renames and reorganizes files to be BIDS and BIDS-App compatible. \n"
-                                                 "Used with Depression Connectome Project 1/2017. Files are copied NOT moved.",
+                                                 "Used with Depression Connectome Project 1/2017. Files are copied NOT moved."
+                                                 "Does not support session naming at this point in time.",
                                      formatter_class=RawTextHelpFormatter)
     parser.add_argument('input_dir', help="Path to input directory, where converted files are located")
     parser.add_argument('output_dir', help="Path to output directory, where renamed and reorganized files will be placed")
-    parser.add_argument('-dataset', dest='dataset', help="Datast name", required=True)
+    parser.add_argument('-dataset', dest='dataset', help="Dataset name", required=False)
     parser.add_argument('-subjID', dest='subjID', help="subject ID", required=True)
-    parser.add_argument('--tfmrifirst', help="Spin echo field map for task fMRI was acquired before the SPE field map"
-                                             "for the resting state fMRIs", required= False, action='store_true')
     args = parser.parse_args()
 
     imageTypes = ['T1W',
@@ -106,7 +105,10 @@ if __name__ == '__main__':
             raise IOError('Directory ' + args.output_dir + ' does not exist.')
 
         idir= glob(args.input_dir)[0]
-        odir= os.path.join(glob(args.output_dir)[0], args.dataset)
+        if args.dataset:
+            odir= os.path.join(glob(args.output_dir)[0], args.dataset)
+        else:
+            odir= glob(args.output_dir)[0]
         subdir= os.path.join(odir,'sub-'+args.subjID)
 
         try:
