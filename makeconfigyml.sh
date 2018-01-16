@@ -21,7 +21,9 @@ filterDirs () {
     subString=$1
     longString=$2
     outdirString=$3
-    if [[ ${longString} == *"${subString}"* ]] && [[ ${longString} != *"SETTER"* ]] && [[ ${longString} != *"PHYSIOLOG"* ]] && [[ ${longString} != *"ASL"* ]] ; then
+    longStringdir="${longString##*/}"
+
+    if [[ ${longStringdir} == *"${subString}"* ]] && [[ ${longStringdir} != *"SETTER"* ]] && [[ ${longStringdir} != *"PHYSIOLOG"* ]] && [[ ${longStringdir} != *"ASL"* ]] ; then
         fn="$(basename ${i})"
         mkdir -p ${outdirString}/${fn}
 
