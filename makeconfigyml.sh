@@ -23,7 +23,7 @@ filterDirs () {
     outdirString=$3
     longStringdir="${longString##*/}"
 
-    if [[ ${longStringdir} == *"${subString}"* ]] && [[ ${longStringdir} != *"SETTER"* ]] && [[ ${longStringdir} != *"PHYSIOLOG"* ]] && [[ ${longStringdir} != *"ASL"* ]] ; then
+    if [[ ${longStringdir} == *"${subString}"* ]] && [[ ${longStringdir} != *"SETTER"* ]] && [[ ${longStringdir} != *"PHYSIOLOG"* ]] && [[ ${longStringdir} != *"ASL"* ]] && [[ ${longStringdir} != *"DISTORTIONMAP"* ]]; then
         fn="$(basename ${i})"
         mkdir -p ${outdirString}/${fn}
 
